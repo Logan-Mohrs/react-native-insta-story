@@ -15,6 +15,10 @@ export interface IUserStory<T = Record<string, any>> {
   colors: any;
   dark: boolean;
   backgroundImage: any;
+  pressUserName: (str: string) => void;
+  pressValue: (str: any) => void;
+  addReaction: (str: string) => void;
+  deleteReaction: (str: string) => void;
   fonts: {};
   stories: IUserStoryItem<T>[];
   /** INTERNAL USE ONLY */
@@ -124,6 +128,10 @@ export interface StoryListItemProps {
   colors: any;
   dark: boolean;
   backgroundImage: any;
+  pressUserName: (str: string) => void;
+  pressValue: (str: any) => void;
+  addReaction: (str: string) => void;
+  deleteReaction: (str: string) => void;
   /**
    * Callback which returns a custom React Element to use as the
    * swipeUpComponent. IUserStoryItem is passed as an arg.

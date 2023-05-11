@@ -60,6 +60,10 @@ export const Story = ({
   };
 
   useEffect(() => {
+    setDataState(data);
+  }, [data]);
+
+  useEffect(() => {
     handleSeen();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
@@ -131,6 +135,10 @@ export const Story = ({
           fonts={dataState[0].fonts}
           colors={dataState[0].colors}
           dark={dataState[0].dark}
+          pressUserName={dataState[0].pressUserName}
+          pressValue={dataState[0].pressValue}
+          addReaction={dataState[0].addReaction}
+          deleteReaction={dataState[0].deleteReaction}
           backgroundImage={dataState[0].backgroundImage}
           index={i}
           onStorySeen={onStorySeen}

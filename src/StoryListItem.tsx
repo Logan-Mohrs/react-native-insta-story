@@ -51,6 +51,10 @@ export const StoryListItem = ({
   colors,
   dark,
   backgroundImage,
+  pressUserName,
+  pressValue,
+  addReaction,
+  deleteReaction,
   ...props
 }: StoryListItemProps) => {
   const [load, setLoad] = useState<boolean>(true);
@@ -305,6 +309,20 @@ export const StoryListItem = ({
             colors={colors}
             dark={dark}
             fonts={fonts}
+            pressUserName={(str) => {
+              pressUserName(str);
+              onClosePress();
+            }}
+            pressValue={(str) => {
+              pressValue(str);
+              onClosePress();
+            }}
+            addReaction={(str) => {
+              addReaction(str);
+            }}
+            deleteReaction={(str) => {
+              deleteReaction(str);
+            }}
           />
         </View>
         <View style={styles.pressContainer}>

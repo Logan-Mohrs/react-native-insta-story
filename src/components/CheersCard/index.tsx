@@ -11,12 +11,22 @@ import { AddEmoji } from '../../assets/images';
 // import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { emojiMap } from '../../helpers/CheersHelpers';
 
+interface addReactionProps {
+  reactorId: string;
+  cheersId: string;
+  reactionType: string;
+}
+
 export interface CheersCardProps {
   data: object;
   parentStyle?: ViewStyle;
   colors: any;
   dark: boolean;
   fonts: {};
+  pressUserName: (str: string) => void;
+  pressValue: (item: any) => void;
+  deleteReaction: (str: string) => void;
+  addReaction: (str: addReactionProps) => void;
 }
 
 const CheersCard = ({
@@ -25,6 +35,10 @@ const CheersCard = ({
   colors,
   dark,
   fonts,
+  pressUserName,
+  pressValue,
+  deleteReaction,
+  addReaction,
 }: CheersCardProps) => {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState(undefined);
@@ -34,17 +48,12 @@ const CheersCard = ({
   const recipient = data?.recipient;
   const sender = data?.sender;
   const values = data?.values;
-  // const dispatch = useAppDispatch();
-  // const [deleteReaction] = useDeleteReactionMutation();
-  // const [addReaction] = useAddReactionMutation();
   // const [timePosted, setTimePosted] = useState('');
   const [loading, setLoading] = useState(false);
   moment.locale('en');
   const { base } = fonts;
-  const { boldBase } = fonts;
   const { link } = fonts;
   const { detailOne } = fonts;
-  const { detailTwo } = fonts;
 
   const updateReactions = (dataReactions) => {
     const x = [];
@@ -179,11 +188,16 @@ const CheersCard = ({
       const zed = selectedEmojis.filter((item) => item.name === emoji.name);
       const x = selectedEmojisName.filter((item) => item !== emoji.name);
       setSelectedEmojisName(x);
-      // deleteReaction(zed[0].reactionId);
+      deleteReaction(zed[0].reactionId);
     } else {
+      addOrRemoveReaction(emoji, true);
       selectedEmojisName.push(emoji.name);
       selectedEmojis.push({ ...emoji, count: 1 });
-      // addReaction({ reactorId: uid, cheersId: data.id, reactionType: emoji.name });
+      addReaction({
+        reactorId: uid,
+        cheersId: data.id,
+        reactionType: emoji.name,
+      });
     }
   };
 
@@ -289,6 +303,7 @@ const CheersCard = ({
                 color: colors.accent,
                 textDecorationColor: colors.accent,
               }}
+              onPress={() => pressUserName(sender?.id)}
             >{`${sender?.firstName} ${sender?.lastName} `}</Text>
             to
             <Text
@@ -297,6 +312,7 @@ const CheersCard = ({
                 color: colors.accent,
                 textDecorationColor: colors.accent,
               }}
+              onPress={() => pressUserName(recipient?.id)}
             >{` ${recipient?.firstName} ${recipient?.lastName}`}</Text>
           </Text>
         </View>
@@ -310,7 +326,11 @@ const CheersCard = ({
         </Text>
         <View style={{ flexDirection: 'row', marginTop: 7, flexWrap: 'wrap' }}>
           {values?.map((item) => (
-            <Text style={{ marginRight: 8, color: colors.accent }} key={item}>
+            <Text
+              style={{ marginRight: 8, color: colors.accent }}
+              key={item}
+              onPress={() => pressValue(item)}
+            >
               {`#${item.label || item.value}`}
             </Text>
           ))}
