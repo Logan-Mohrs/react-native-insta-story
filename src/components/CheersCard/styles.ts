@@ -1,14 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import {
-  base,
-  boldBase,
-  detailOne,
-  detailTwo,
-  link,
-} from '../../styles/typography';
-
-const styles = (colors: any, dark: boolean) =>
+const styles = (colors: any, dark: boolean, fonts: any) =>
   StyleSheet.create({
     container: {
       backgroundColor: colors.cheersBackground,
@@ -45,12 +37,12 @@ const styles = (colors: any, dark: boolean) =>
       color: colors.text,
     },
     emojiCounter: {
-      ...detailOne,
+      ...fonts.detailOne,
       color: colors.text,
       paddingLeft: 4,
     },
     reivedCheersText: {
-      ...boldBase,
+      ...fonts.boldBase,
       alignSelf: 'center',
       color: colors.text,
     },
@@ -86,16 +78,16 @@ const styles = (colors: any, dark: boolean) =>
       alignItems: 'center',
     },
     unboldedText: {
-      ...base,
+      ...fonts.base,
       color: colors.text,
     },
     boldedText: {
-      ...link,
+      ...fonts.link,
       color: colors.accent,
       textDecorationColor: colors.accent,
     },
     timePosted: {
-      ...detailTwo,
+      ...fonts.detailTwo,
       textAlign: 'right',
       color: colors.unselected,
     },
@@ -177,7 +169,7 @@ const styles = (colors: any, dark: boolean) =>
       maxWidth: '75%',
     },
     confirmationViewUnbolded: {
-      ...base,
+      ...fonts.base,
       color: colors.text,
     },
     uploadImageContainer: {

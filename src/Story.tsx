@@ -1,13 +1,14 @@
 import React, { Fragment, useRef, useState, useEffect } from 'react';
+
 import { Dimensions, View, Platform, StyleSheet } from 'react-native';
 import Modal from 'react-native-modalbox';
 
-import StoryListItem from './StoryListItem';
-import StoryCircleListView from './StoryCircleListView';
-import { isNullOrWhitespace } from './helpers';
 import AndroidCubeEffect from './components/AndroidCubeEffect';
 import CubeNavigationHorizontal from './components/CubeNavigationHorizontal';
+import { isNullOrWhitespace } from './helpers';
 import { IUserStory, NextOrPrevious, StoryProps } from './interfaces';
+import StoryCircleListView from './StoryCircleListView';
+import StoryListItem from './StoryListItem';
 
 const { height, width } = Dimensions.get('window');
 
@@ -68,7 +69,7 @@ export const Story = ({
     const seenIndex = dataState.indexOf(seen);
     if (seenIndex > 0) {
       if (!dataState[seenIndex]?.seen) {
-        let tempData = dataState;
+        const tempData = dataState;
         dataState[seenIndex] = {
           ...dataState[seenIndex],
           seen: true,
@@ -127,6 +128,10 @@ export const Story = ({
               onClose(x);
             }
           }}
+          fonts={dataState[0].fonts}
+          colors={dataState[0].colors}
+          dark={dataState[0].dark}
+          backgroundImage={dataState[0].backgroundImage}
           index={i}
           onStorySeen={onStorySeen}
           unloadedAnimationBarStyle={unloadedAnimationBarStyle}
@@ -154,24 +159,23 @@ export const Story = ({
           {renderStoryList()}
         </CubeNavigationHorizontal>
       );
-    } else {
-      return (
-        <AndroidCubeEffect
-          ref={cube as React.LegacyRef<AndroidCubeEffect>}
-          callBackAfterSwipe={(x: any) => {
-            if (x != currentPage) {
-              setCurrentPage(parseInt(x));
-            }
-          }}
-        >
-          {renderStoryList()}
-        </AndroidCubeEffect>
-      );
     }
+    return (
+      <AndroidCubeEffect
+        ref={cube as React.LegacyRef<AndroidCubeEffect>}
+        callBackAfterSwipe={(x: any) => {
+          if (x != currentPage) {
+            setCurrentPage(parseInt(x));
+          }
+        }}
+      >
+        {renderStoryList()}
+      </AndroidCubeEffect>
+    );
   };
 
   return (
-    <Fragment>
+    <>
       <View style={style}>
         <StoryCircleListView
           handleStoryItemPress={_handleStoryItemPress}
@@ -196,11 +200,11 @@ export const Story = ({
         swipeToClose
         swipeArea={250}
         backButtonClose
-        coverScreen={true}
+        coverScreen
       >
         {renderCube()}
       </Modal>
-    </Fragment>
+    </>
   );
 };
 

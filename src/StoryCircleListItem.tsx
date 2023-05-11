@@ -102,8 +102,8 @@ const StoryCircleListItem = ({
               ...avatarTextStyle,
             },
             isPressed
-              ? { color: pressedAvatarTextColor || undefined }
-              : { color: unPressedAvatarTextColor || undefined },
+              ? { color: pressedAvatarTextColor || item.colors.text }
+              : { color: unPressedAvatarTextColor || item.colors.text },
           ]}
         >
           {item.user_name}

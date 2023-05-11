@@ -6,16 +6,17 @@ import { View, Text, Image, TouchableOpacity, ViewStyle } from 'react-native';
 import EmojiPicker from 'rn-emoji-keyboard';
 
 import styles from './styles';
-// import { useAddReactionMutation, useDeleteReactionMutation } from '../../api/reaction';
-import { AddEmoji } from 'src/assets/images';
+// import { useAddReactionMutation, useDeleteReactionMutation } from '../../api/reaction'
+import { AddEmoji } from '../../assets/images';
 // import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { emojiMap } from 'src/helpers/CheersHelpers';
+import { emojiMap } from '../../helpers/CheersHelpers';
 
 export interface CheersCardProps {
   data: object;
-  parentStyle: ViewStyle;
+  parentStyle?: ViewStyle;
   colors: any;
   dark: boolean;
+  fonts: {};
 }
 
 const CheersCard = ({
@@ -23,13 +24,13 @@ const CheersCard = ({
   parentStyle = {},
   colors,
   dark,
+  fonts,
 }: CheersCardProps) => {
-  const style = styles(colors, dark);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState(undefined);
   const [selectedEmojisName, setSelectedEmojisName] = useState(undefined);
   const [reactions, setReactions] = useState(undefined);
-  // const { uid } = useAppSelector((state: RootState) => state.auth);
+  const uid = '123456';
   const recipient = data?.recipient;
   const sender = data?.sender;
   const values = data?.values;
@@ -37,7 +38,13 @@ const CheersCard = ({
   // const [deleteReaction] = useDeleteReactionMutation();
   // const [addReaction] = useAddReactionMutation();
   // const [timePosted, setTimePosted] = useState('');
+  const [loading, setLoading] = useState(false);
   moment.locale('en');
+  const { base } = fonts;
+  const { boldBase } = fonts;
+  const { link } = fonts;
+  const { detailOne } = fonts;
+  const { detailTwo } = fonts;
 
   const updateReactions = (dataReactions) => {
     const x = [];
@@ -102,7 +109,7 @@ const CheersCard = ({
   // };
 
   useEffect(() => {
-    if (data) {
+    if (data && data.reactions && data.reactionCount) {
       updateReactions(data?.reactions);
       // updateTime(data?.created);
       // if (recipient?.id === uid) {
@@ -115,9 +122,9 @@ const CheersCard = ({
     }
   }, [data]);
 
-  // useEffect(() => {
-  //   setLoading(reactions && selectedEmojis && selectedEmojisName);
-  // }, [reactions, selectedEmojis, selectedEmojisName]);
+  useEffect(() => {
+    setLoading(reactions && selectedEmojis && selectedEmojisName);
+  }, [reactions, selectedEmojis, selectedEmojisName]);
 
   const addOrRemoveReaction = (emoji, add: boolean) => {
     const tempReactions = [...reactions];
@@ -188,77 +195,159 @@ const CheersCard = ({
     const isSelected = isEmojiSelected(emoji.emoji);
     return (
       <TouchableOpacity
-        style={[
-          style.emojiContainer,
-          {
-            backgroundColor: isSelected
-              ? colors.emojiBackgroundSelected
-              : colors.emojiBackgroundUnselected,
-          },
-        ]}
+        style={{
+          justifyContent: 'center',
+          marginRight: 15,
+          marginBottom: 5,
+          alignItems: 'center',
+          height: 28,
+          paddingHorizontal: 6,
+          borderRadius: 41,
+          flexDirection: 'row',
+          backgroundColor: isSelected
+            ? colors.emojiBackgroundSelected
+            : colors.emojiBackgroundUnselected,
+        }}
         key={emoji.name}
         onPress={() => {
           pressEmoji(emoji);
         }}
       >
-        <Text style={style.emojiStyle}>
-          {emoji.emoji} <Text style={style.emojiCounter}>{emoji.count}</Text>
+        <Text
+          style={{
+            fontSize: 19,
+            color: colors.text,
+          }}
+        >
+          {emoji.emoji}{' '}
+          <Text
+            style={{
+              ...detailOne,
+              color: colors.text,
+              paddingLeft: 4,
+            }}
+          >
+            {emoji.count}
+          </Text>
         </Text>
       </TouchableOpacity>
     );
   };
 
-  const confirmationView = () => (
+  return !loading ? (
+    <View style={{ width: 200, height: 200, backgroundColor: 'red' }} />
+  ) : (
     <>
-      <View style={[style.container, parentStyle]}>
-        <View style={style.dashboardProfileImagesContainer}>
-          <View style={{ flexDirection: 'row' }}>
+      <View
+        style={{
+          backgroundColor: colors.cheersBackground,
+          shadowColor: '#7E7E7E',
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: dark ? 0 : 0.5,
+          borderRadius: 6,
+          width: '100%',
+          elevation: 10,
+          paddingVertical: 17,
+          paddingHorizontal: 22,
+        }}
+      >
+        <View style={{}}>
+          <View style={{ flexDirection: 'row', marginBottom: 12 }}>
             <Image
               source={{ uri: sender?.imageUrl }}
-              style={style.dashboardSenderPicture}
+              style={{
+                width: 45,
+                height: 45,
+                borderRadius: 100,
+                borderWidth: 1,
+                borderColor: colors.cheersBackground,
+              }}
               resizeMode="contain"
             />
             <Image
               source={{ uri: recipient?.imageUrl }}
-              style={style.dashboardReceiverPicture}
+              style={{
+                width: 46,
+                height: 46,
+                borderRadius: 100,
+                borderWidth: 2,
+                borderColor: colors.cheersBackground,
+                right: 10,
+              }}
               resizeMode="contain"
             />
           </View>
-          <Text style={style.confirmationViewUnbolded}>
+          <Text
+            style={{
+              ...base,
+              color: colors.text,
+            }}
+          >
             <Text
-              style={style.boldedText}
-            >{`${sender?.firstName} ${sender?.lastName}`}</Text>{' '}
-            to{' '}
+              style={{
+                ...link,
+                color: colors.accent,
+                textDecorationColor: colors.accent,
+              }}
+            >{`${sender?.firstName} ${sender?.lastName} `}</Text>
+            to
             <Text
-              style={style.boldedText}
-            >{`${recipient?.firstName} ${recipient?.lastName}`}</Text>
+              style={{
+                ...link,
+                color: colors.accent,
+                textDecorationColor: colors.accent,
+              }}
+            >{` ${recipient?.firstName} ${recipient?.lastName}`}</Text>
           </Text>
         </View>
         <Image
           source={{ uri: data?.imageUrl }}
-          style={style.mainImage}
+          style={{ width: '100%', height: 201, marginTop: 12, borderRadius: 7 }}
           resizeMode="stretch"
         />
-        <Text style={style.messageText} numberOfLines={1}>
+        <Text style={{ marginTop: 11, color: colors.text }} numberOfLines={1}>
           {data?.note}
         </Text>
-        <View style={style.confirmationValuesContainer}>
+        <View style={{ flexDirection: 'row', marginTop: 7, flexWrap: 'wrap' }}>
           {values?.map((item) => (
-            <Text
-              style={style.valuesText}
-              key={item}
-              onPress={() => navigate(VALUE_FILTER, { item })}
-            >
-              {item.label || item.value}
+            <Text style={{ marginRight: 8, color: colors.accent }} key={item}>
+              {`#${item.label || item.value}`}
             </Text>
           ))}
         </View>
-        <View style={style.dashboardFooter}>
-          {!!reactions.length &&
-            reactions.map((emoji, index) => renderEmoji(emoji, index))}
-          <TouchableOpacity onPress={() => setIsEmojiPickerOpen(true)}>
-            <Image source={AddEmoji} style={style.addEmojiStyle} />
-          </TouchableOpacity>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 12,
+            marginRight: -4,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+          }}
+        >
+          {/* Reactions logic */}
+          {/* Emojis */}
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+            }}
+          >
+            {!!reactions &&
+              reactions.length > 0 &&
+              reactions.map((emoji, index) => renderEmoji(emoji, index))}
+            <TouchableOpacity onPress={() => setIsEmojiPickerOpen(true)}>
+              <Image
+                source={AddEmoji}
+                style={{
+                  width: 24,
+                  height: 24,
+                  tintColor: '#B0A19B',
+                }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       <EmojiPicker
@@ -291,8 +380,6 @@ const CheersCard = ({
       />
     </>
   );
-
-  return confirmationView();
 };
 
 export default CheersCard;

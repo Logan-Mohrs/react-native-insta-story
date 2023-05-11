@@ -23,6 +23,7 @@ const StoryCircleListView = ({
     keyExtractor={(_item, index) => index.toString()}
     data={data}
     horizontal
+    scrollEnabled={data.length > 1 ?? false}
     showsVerticalScrollIndicator={false}
     showsHorizontalScrollIndicator={false}
     ListFooterComponent={<View style={styles.footer} />}

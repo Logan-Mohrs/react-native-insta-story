@@ -12,6 +12,10 @@ export interface IUserStory<T = Record<string, any>> {
   user_id: number;
   user_image: string | undefined | number;
   user_name: string;
+  colors: any;
+  dark: boolean;
+  backgroundImage: any;
+  fonts: {};
   stories: IUserStoryItem<T>[];
   /** INTERNAL USE ONLY */
   seen?: boolean;
@@ -19,7 +23,7 @@ export interface IUserStory<T = Record<string, any>> {
 
 export interface IUserStoryItem<T = Record<string, any>> {
   story_id: number;
-  story_image: string | undefined;
+  story_image: string | undefined | number;
   /** Function that gets called when the swipe up button is pressed */
   onPress?: (props?: any) => any;
   swipeText?: string;
@@ -116,6 +120,10 @@ export interface StoryListItemProps {
   duration: number;
   /** Text of the swipe up button */
   swipeText?: string;
+  fonts: {};
+  colors: any;
+  dark: boolean;
+  backgroundImage: any;
   /**
    * Callback which returns a custom React Element to use as the
    * swipeUpComponent. IUserStoryItem is passed as an arg.

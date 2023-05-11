@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+
 import {
   Animated,
   Image,
@@ -14,6 +15,7 @@ import {
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 
+import CheersCard from './components/CheersCard';
 import { usePrevious, isNullOrWhitespace } from './helpers';
 import {
   IUserStoryItem,
@@ -45,6 +47,10 @@ export const StoryListItem = ({
   storyImageStyle,
   storyAvatarImageStyle,
   storyContainerStyle,
+  fonts,
+  colors,
+  dark,
+  backgroundImage,
   ...props
 }: StoryListItemProps) => {
   const [load, setLoad] = useState<boolean>(true);
@@ -63,14 +69,14 @@ export const StoryListItem = ({
   const prevCurrentPage = usePrevious(currentPage);
 
   useEffect(() => {
-    let isPrevious = !!prevCurrentPage && prevCurrentPage > currentPage;
+    const isPrevious = !!prevCurrentPage && prevCurrentPage > currentPage;
     if (isPrevious) {
       setCurrent(content.length - 1);
     } else {
       setCurrent(0);
     }
 
-    let data = [...content];
+    const data = [...content];
     data.map((x, i) => {
       if (isPrevious) {
         x.finish = 1;
@@ -90,7 +96,7 @@ export const StoryListItem = ({
 
   useEffect(() => {
     if (!isNullOrWhitespace(prevCurrent)) {
-      if (prevCurrent) {
+      if (prevCurrent !== undefined) {
         if (
           current > prevCurrent &&
           content[current - 1].story_image == content[current].story_image
@@ -147,7 +153,7 @@ export const StoryListItem = ({
     // check if the next content is not empty
     setLoad(true);
     if (current !== content.length - 1) {
-      let data = [...content];
+      const data = [...content];
       data[current].finish = 1;
       setContent(data);
       setCurrent(current + 1);
@@ -162,7 +168,7 @@ export const StoryListItem = ({
     // checking if the previous content is not empty
     setLoad(true);
     if (current - 1 >= 0) {
-      let data = [...content];
+      const data = [...content];
       data[current].finish = 0;
       setContent(data);
       setCurrent(current - 1);
@@ -174,7 +180,7 @@ export const StoryListItem = ({
   }
 
   function close(state: NextOrPrevious) {
-    let data = [...content];
+    const data = [...content];
     data.map((x) => (x.finish = 0));
     setContent(data);
     progress.setValue(0);
@@ -211,12 +217,12 @@ export const StoryListItem = ({
         <View style={styles.backgroundContainer}>
           <Image
             onLoadEnd={() => start()}
-            source={{ uri: content[current].story_image }}
+            source={backgroundImage}
             style={[styles.image, storyImageStyle]}
           />
           {load && (
             <View style={styles.spinnerContainer}>
-              <ActivityIndicator size="large" color={'white'} />
+              <ActivityIndicator size="large" color="white" />
             </View>
           )}
         </View>
@@ -235,7 +241,7 @@ export const StoryListItem = ({
                   style={[
                     {
                       flex: current == key ? progress : content[key].finish,
-                      height: 2,
+                      height: 4,
                       backgroundColor: 'white',
                     },
                     loadedAnimationBarStyle,
@@ -247,17 +253,31 @@ export const StoryListItem = ({
         </View>
         <View style={[styles.userContainer, storyUserContainerStyle]}>
           <View style={styles.flexRowCenter}>
-            <Image
-              style={[styles.avatarImage, storyAvatarImageStyle]}
-              source={profileImage}
-            />
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center',
+                height: 53,
+                width: 53,
+                borderRadius: 100,
+                backgroundColor: colors.accent,
+              }}
+            >
+              <Image
+                style={[styles.avatarImage, storyAvatarImageStyle]}
+                source={profileImage}
+              />
+            </View>
             {typeof renderTextComponent === 'function' ? (
               renderTextComponent({
                 item: content[current],
                 profileName,
               })
             ) : (
-              <Text style={styles.avatarText}>{profileName}</Text>
+              <Text style={[styles.avatarText, { color: colors.text }]}>
+                {profileName}
+              </Text>
             )}
           </View>
           <View style={styles.closeIconContainer}>
@@ -278,6 +298,14 @@ export const StoryListItem = ({
               </TouchableOpacity>
             )}
           </View>
+        </View>
+        <View style={{ paddingHorizontal: 20 }}>
+          <CheersCard
+            data={content[current].cheersCard}
+            colors={colors}
+            dark={dark}
+            fonts={fonts}
+          />
         </View>
         <View style={styles.pressContainer}>
           <TouchableWithoutFeedback
@@ -323,7 +351,7 @@ export const StoryListItem = ({
           onPress={onSwipeUp}
           style={styles.swipeUpBtn}
         >
-          <Text style={styles.swipeText}></Text>
+          <Text style={styles.swipeText} />
           <Text style={styles.swipeText}>{swipeText}</Text>
         </TouchableOpacity>
       )}
@@ -344,6 +372,7 @@ const styles = StyleSheet.create({
   },
   flex: {
     flex: 1,
+    // backgroundColor: 'red',
   },
   flexCol: {
     flex: 1,
@@ -378,9 +407,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: 10,
     paddingHorizontal: 10,
+    paddingBottom: 20,
   },
   animationBackground: {
-    height: 2,
+    height: 4,
     flex: 1,
     flexDirection: 'row',
     backgroundColor: 'rgba(117, 117, 117, 0.5)',
@@ -391,10 +421,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 15,
+    marginBottom: 20,
   },
   avatarImage: {
-    height: 30,
-    width: 30,
+    height: 35,
+    width: 46,
     borderRadius: 100,
   },
   avatarText: {
