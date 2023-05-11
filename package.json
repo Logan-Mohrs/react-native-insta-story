@@ -42,7 +42,7 @@
     "react-native-modalbox": "^2.0.2",
     "react-native-svg": "^13.9.0",
     "react-native-swipe-gestures": "^1.0.5",
-    "rn-emoji-keyboard": "^1.2.2"
+    "rn-emoji-keyboard": "^1.2.1"
   },
   "devDependencies": {
     "@tsconfig/react-native": "^2.0.2",
