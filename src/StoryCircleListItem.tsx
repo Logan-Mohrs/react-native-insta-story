@@ -49,40 +49,48 @@ const StoryCircleListItem = ({
 
   return (
     <View style={styles.container}>
-      {/* <LinearGradient colors={['#DDA63D', '#829CC0', '#3B506E', '#F5BA45']}> */}
-      <TouchableOpacity
-        onPress={() => _handleItemPress(item)}
-        style={[
-          styles.avatarWrapper,
-          {
-            height: avatarWrapperSize,
-            width: avatarWrapperSize,
-          },
-          avatarWrapperStyle,
-          !isPressed
-            ? {
-                borderColor: unPressedBorderColor ?? 'red',
-              }
-            : {
-                borderColor: pressedBorderColor ?? 'grey',
-              },
-        ]}
+      <LinearGradient
+        colors={['#DDA63D', '#829CC0', '#3B506E', '#F5BA45']}
+        style={{
+          width: avatarWrapperSize + 6,
+          height: avatarWrapperSize + 6,
+          borderRadius: 100,
+          justifyContent: 'center',
+        }}
       >
-        <Image
+        <TouchableOpacity
+          onPress={() => _handleItemPress(item)}
           style={[
+            styles.avatarWrapper,
             {
-              height: avatarSize.height,
-              width: avatarSize.width,
-              borderRadius: 100,
+              height: avatarWrapperSize,
+              width: avatarWrapperSize,
             },
-            avatarImageStyle,
+            avatarWrapperStyle,
+            !isPressed
+              ? {
+                  borderColor: unPressedBorderColor ?? 'red',
+                }
+              : {
+                  borderColor: pressedBorderColor ?? 'grey',
+                },
           ]}
-          // source={{ uri: item.user_image }}
-          source={item.user_image}
-          defaultSource={Platform.OS === 'ios' ? DEFAULT_AVATAR : null}
-        />
-      </TouchableOpacity>
-      {/* </LinearGradient> */}
+        >
+          <Image
+            style={[
+              {
+                height: avatarSize.height,
+                width: avatarSize.width,
+                borderRadius: 100,
+              },
+              avatarImageStyle,
+            ]}
+            // source={{ uri: item.user_image }}
+            source={item.user_image}
+            defaultSource={Platform.OS === 'ios' ? DEFAULT_AVATAR : null}
+          />
+        </TouchableOpacity>
+      </LinearGradient>
       {showText && (
         <Text
           numberOfLines={1}
@@ -110,9 +118,9 @@ export default StoryCircleListItem;
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
+    alignItems: 'center',
   },
   avatarWrapper: {
-    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
@@ -120,7 +128,6 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     height: 64,
     width: 64,
-    backgroundColor: '#829CC0',
   },
   text: {
     marginTop: 3,

@@ -10,7 +10,7 @@ export type NextOrPrevious = 'next' | 'previous';
 
 export interface IUserStory<T = Record<string, any>> {
   user_id: number;
-  user_image: string | undefined;
+  user_image: string | undefined | number;
   user_name: string;
   stories: IUserStoryItem<T>[];
   /** INTERNAL USE ONLY */
@@ -27,6 +27,7 @@ export interface IUserStoryItem<T = Record<string, any>> {
   customProps?: T;
   /** FOR INTERNAL USE ONLY */
   finish?: number;
+  cheersCard: any;
 }
 
 /** User with one story representing the current story on screen */
@@ -110,7 +111,7 @@ export interface StoryListItemProps {
   /** Name of the user - IUserStory.user_name */
   profileName: string;
   /** Profile picture of the user - IUserStory.user_image */
-  profileImage: string | undefined;
+  profileImage: string | undefined | number;
   /** Time in seconds */
   duration: number;
   /** Text of the swipe up button */

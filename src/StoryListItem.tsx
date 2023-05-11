@@ -249,7 +249,7 @@ export const StoryListItem = ({
           <View style={styles.flexRowCenter}>
             <Image
               style={[styles.avatarImage, storyAvatarImageStyle]}
-              source={{ uri: profileImage }}
+              source={profileImage}
             />
             {typeof renderTextComponent === 'function' ? (
               renderTextComponent({
