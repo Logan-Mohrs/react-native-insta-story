@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import {
   View,
   Image,
@@ -7,11 +8,11 @@ import {
   StyleSheet,
   Platform,
 } from 'react-native';
-
-import { usePrevious } from './helpers/StateHelpers';
-import { IUserStory, StoryCircleListItemProps } from './interfaces';
+import LinearGradient from 'react-native-linear-gradient';
 
 import DEFAULT_AVATAR from './assets/images/no_avatar.png';
+import { usePrevious } from './helpers/StateHelpers';
+import { IUserStory, StoryCircleListItemProps } from './interfaces';
 
 const StoryCircleListItem = ({
   item,
@@ -19,7 +20,7 @@ const StoryCircleListItem = ({
   pressedBorderColor,
   unPressedAvatarTextColor,
   pressedAvatarTextColor,
-  avatarSize = 60,
+  avatarSize = { height: 60, width: 60 },
   showText,
   avatarTextStyle,
   handleStoryItemPress,
@@ -43,10 +44,12 @@ const StoryCircleListItem = ({
     setIsPressed(true);
   };
 
-  const avatarWrapperSize = avatarSize + 4;
+  // const avatarWrapperSize = avatarSize + 4;
+  const avatarWrapperSize = 53;
 
   return (
     <View style={styles.container}>
+      {/* <LinearGradient colors={['#DDA63D', '#829CC0', '#3B506E', '#F5BA45']}> */}
       <TouchableOpacity
         onPress={() => _handleItemPress(item)}
         style={[
@@ -68,23 +71,25 @@ const StoryCircleListItem = ({
         <Image
           style={[
             {
-              height: avatarSize,
-              width: avatarSize,
+              height: avatarSize.height,
+              width: avatarSize.width,
               borderRadius: 100,
             },
             avatarImageStyle,
           ]}
-          source={{ uri: item.user_image }}
+          // source={{ uri: item.user_image }}
+          source={item.user_image}
           defaultSource={Platform.OS === 'ios' ? DEFAULT_AVATAR : null}
         />
       </TouchableOpacity>
+      {/* </LinearGradient> */}
       {showText && (
         <Text
           numberOfLines={1}
-          ellipsizeMode="tail"
+          // ellipsizeMode="tail"
           style={[
             {
-              width: avatarWrapperSize,
+              // width: avatarWrapperSize,
               ...styles.text,
               ...avatarTextStyle,
             },
@@ -104,8 +109,7 @@ export default StoryCircleListItem;
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 5,
-    marginRight: 10,
+    justifyContent: 'center',
   },
   avatarWrapper: {
     borderWidth: 2,
@@ -116,6 +120,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     height: 64,
     width: 64,
+    backgroundColor: '#829CC0',
   },
   text: {
     marginTop: 3,

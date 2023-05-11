@@ -72,7 +72,7 @@ interface SharedCircleListProps {
   /** The color of the avatar text when seen */
   pressedAvatarTextColor?: TextStyle['color'];
   /** A custom size for the avatar rendered in the FlatList */
-  avatarSize?: number;
+  avatarSize?: { width: number; height: number };
   /** Display username below avatars in FlatList */
   showText?: boolean;
   /** Username text style below the avatar */
@@ -162,7 +162,7 @@ export interface StoryProps {
   /** Time in seconds */
   duration: number;
   /** A custom size for the avatar rendered in the FlatList */
-  avatarSize?: number;
+  avatarSize?: { width: number; height: number };
   /** Style prop for the avatar FlatList container */
   style?: ViewStyle;
   /** The color of the avatar border when unseen */
