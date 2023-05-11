@@ -2,15 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 import moment from 'moment';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ViewStyle,
-  Share,
-  Alert,
-} from 'react-native';
+import { View, Text, Image, TouchableOpacity, ViewStyle } from 'react-native';
 import EmojiPicker from 'rn-emoji-keyboard';
 
 import styles from './styles';
