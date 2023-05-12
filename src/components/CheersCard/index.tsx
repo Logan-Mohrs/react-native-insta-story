@@ -1,6 +1,7 @@
 /* eslint-dsable @typescript-eslint/no-use-before-define */
 import React, { useEffect, useState } from 'react';
 
+import { isEqual } from 'lodash';
 import moment from 'moment';
 import { View, Text, Image, TouchableOpacity, ViewStyle } from 'react-native';
 import EmojiPicker from 'rn-emoji-keyboard';
@@ -10,7 +11,6 @@ import styles from './styles';
 import { AddEmoji } from '../../assets/images';
 // import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { emojiMap } from '../../helpers/CheersHelpers';
-import { isEqual } from 'lodash';
 
 interface addReactionProps {
   reactorId: string;
@@ -67,25 +67,13 @@ const CheersCard = ({
   const { base } = fonts;
   const { link } = fonts;
   const { detailOne } = fonts;
-  const [addedReactions1, setAddedReactions1] = useState(addedReactions);
-  const [deletedReactions1, setDeletedReactions1] = useState(deletedReactions);
-
-  useEffect(() => {
-    const z = addedReactions.some((item, index) => {
-      if (isEqual(item, addedReactions1[index])) {
-        return true;
-      }
-    });
-    if (z) {
-      setAddedReactions1(addedReactions);
-    }
-  }, [addedReactions]);
 
   const updateReactions = (dataReactions) => {
-    const x = [];
-    const y = [];
-    const z = [];
+    let x = [];
+    let y = [];
+    let z = [];
     if (dataReactions) {
+      // const newItems = dataReactions.filter((item) => item[1].map((item2) => item2.reactionId !== del))
       Object.entries(dataReactions).map((item) => {
         const exist = emojiMap.get(item[0]);
         if (exist) {
@@ -104,30 +92,47 @@ const CheersCard = ({
         }
         return null;
       });
-      // if (addedReactions1) {
-      //   addedReactions1.map((item) => {
-      //     const r = { state: false, index: 0 };
-      //     x.map((item1, index) => {
-      //       if (item1.name === item.reactionType) {
-      //         r.state = true;
-      //         r.index = index;
-      //       }
-      //     });
-      //     if (r.state) {
-      //       x[r.index].count += 1;
-      //     } else {
-      //       const exist = emojiMap.get(item.reactionType);
-      //       x.push({ ...exist, count: 1 });
-      //       y.push({
-      //         ...exist,
-      //         count: 1,
-      //         reactionId: null,
-      //       });
-      //       z.push(exist.name);
-      //       return null;
-      //     }
-      //   });
-      // }
+      if (deletedReactions && deletedReactions.length > 0) {
+        let p = y;
+        deletedReactions.map((item) => {
+          x.map((item1, index) => {
+            if (item1.name === item.name) {
+              if (item1.count === 1) {
+                x = x.filter((item2) => item2.name !== item.name);
+              } else {
+                item1.count -= 1;
+              }
+            }
+          });
+          z = z.filter((item1) => item1 !== item.name);
+          p = p.filter((item1) => item1.reactionId !== item.reactionId);
+        });
+        y = p;
+      }
+      if (addedReactions) {
+        addedReactions.map((item) => {
+          const r = { state: false, index: 0 };
+          x.map((item1, index) => {
+            if (item1.name === item.reactionType) {
+              r.state = true;
+              r.index = index;
+            }
+          });
+          if (r.state) {
+            x[r.index].count += 1;
+          } else {
+            const exist = emojiMap.get(item.reactionType);
+            x.push({ ...exist, count: 1 });
+            y.push({
+              ...exist,
+              count: 1,
+              reactionId: null,
+            });
+            z.push(exist.name);
+            return null;
+          }
+        });
+      } // this item
     }
     setReactions(x);
     setSelectedEmojis(y);
@@ -135,19 +140,10 @@ const CheersCard = ({
   };
 
   useEffect(() => {
-    console.log({ addedReactions1 });
-    setAddedReactions(addedReactions1);
-  }, [addedReactions1]);
-
-  useEffect(() => {
-    setDeletedReactions(deletedReactions1);
-  }, [deletedReactions1]);
-
-  useEffect(() => {
     if (data && data.reactions && data.reactionCount) {
       updateReactions(data?.reactions);
     }
-  }, [data, addedReactions1, deletedReactions1]);
+  }, [data, addedReactions, deletedReactions]); //
 
   useEffect(() => {
     setLoading(reactions && selectedEmojis && selectedEmojisName);
@@ -203,26 +199,29 @@ const CheersCard = ({
 
     if (exists) {
       addOrRemoveReaction(emoji, false);
-      const per = addedReactions1.some(
+      const per = addedReactions.some(
         (item) => item.reactionType === emoji.name,
       );
       const zed = selectedEmojis.filter((item) => item.name === emoji.name);
       const x = selectedEmojisName.filter((item) => item !== emoji.name);
       setSelectedEmojisName(x);
       if (!per) {
-        setDeletedReactions1([...deletedReactions1, zed[0].reactionId]);
-        deleteReaction(zed[0].reactionId);
+        setDeletedReactions([
+          ...deletedReactions,
+          { reactionId: zed[0].reactionId, name: emoji.name },
+        ]);
+        // deleteReaction(zed[0].reactionId);
       } else {
-        setAddedReactions1(
-          addedReactions1.filter((item) => item.reactionType !== emoji.name),
+        setAddedReactions(
+          addedReactions.filter((item) => item.reactionType !== emoji.name),
         );
       }
     } else {
       addOrRemoveReaction(emoji, true);
       selectedEmojisName.push(emoji.name);
       selectedEmojis.push({ ...emoji, count: 1 });
-      setAddedReactions1([
-        ...addedReactions1,
+      setAddedReactions([
+        ...addedReactions,
         {
           reactorId: uid,
           cheersId: data.id,
@@ -230,7 +229,7 @@ const CheersCard = ({
         },
       ]);
     }
-  };
+  }; // This entire thing
 
   const closeEmojiKeyboard = () => {
     setIsEmojiPickerOpen(false);

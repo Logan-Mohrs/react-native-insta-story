@@ -88,17 +88,28 @@ export const StoryListItem = ({
     [],
   ]);
 
-  useEffect(() => {
-    console.log(reactionsToAdd);
-    console.log('Current: ', reactionsToAdd[current]);
-  }, [reactionsToAdd]);
-
   const [current, setCurrent] = useState(0);
 
   const progress = useRef(new Animated.Value(0)).current;
 
   const prevCurrentPage = usePrevious(currentPage);
 
+  const customClose = () => {
+    reactionsToAdd.map((item) => {
+      if (item.length > 0) {
+        item.map((item2) => {
+          addReaction(item2);
+        });
+      }
+    });
+    reactionsToDelete.map((item) => {
+      if (item.length > 0) {
+        item.map((item2) => {
+          deleteReaction(item2.reactionId);
+        });
+      }
+    });
+  };
   useEffect(() => {
     const isPrevious = !!prevCurrentPage && prevCurrentPage > currentPage;
     if (isPrevious) {
@@ -165,6 +176,7 @@ export const StoryListItem = ({
   function onSwipeUp(_props?: any) {
     if (onClosePress) {
       onClosePress();
+      customClose();
     }
     if (content[current].onPress) {
       content[current].onPress?.();
@@ -173,6 +185,7 @@ export const StoryListItem = ({
 
   function onSwipeDown(_props?: any) {
     onClosePress();
+    customClose();
   }
 
   const config = {
@@ -329,6 +342,7 @@ export const StoryListItem = ({
                 onPress={() => {
                   if (onClosePress) {
                     onClosePress();
+                    customClose();
                   }
                 }}
               >
@@ -348,21 +362,22 @@ export const StoryListItem = ({
             dark={dark}
             fonts={fonts}
             pressUserName={(str) => {
-              pressUserName(str);
               onClosePress();
+              customClose();
+              pressUserName(str);
             }}
             pressValue={(str) => {
-              pressValue(str);
               onClosePress();
+              customClose();
+              pressValue(str);
             }}
             addReaction={(str) => {
               addReaction(str);
             }}
             addedReactions={reactionsToAdd[current]}
-            // deletedReactions={reactionsToDelete}
+            deletedReactions={reactionsToDelete[current]}
             setAddedReactions={(item) => {
               if (item) {
-                console.log({ item });
                 const x = reactionsToAdd.map((item1, index) => {
                   if (index === current) {
                     return [...item];
@@ -372,7 +387,17 @@ export const StoryListItem = ({
                 setReactionsToAdd(x);
               }
             }}
-            setDeletedReactions={(item) => setReactionsToDelete(item)}
+            setDeletedReactions={(item) => {
+              if (item) {
+                const x = reactionsToDelete.map((item1, index) => {
+                  if (index === current) {
+                    return [...item];
+                  }
+                  return item1;
+                });
+                setReactionsToDelete(x);
+              }
+            }}
             deleteReaction={(str) => {
               deleteReaction(str);
             }}
@@ -413,7 +438,7 @@ export const StoryListItem = ({
           </TouchableWithoutFeedback>
         </View>
       </View>
-      {typeof renderSwipeUpComponent === 'function' ? (
+      {/* {typeof renderSwipeUpComponent === 'function' ? (
         renderSwipeUpComponent({
           onPress: onSwipeUp,
           item: content[current],
@@ -427,7 +452,7 @@ export const StoryListItem = ({
           <Text style={styles.swipeText} />
           <Text style={styles.swipeText}>{swipeText}</Text>
         </TouchableOpacity>
-      )}
+      )} */}
     </GestureRecognizer>
   );
 };
