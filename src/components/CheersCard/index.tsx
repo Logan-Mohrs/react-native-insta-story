@@ -26,14 +26,13 @@ export interface CheersCardProps {
   fonts: {};
   pressUserName: (str: string) => void;
   pressValue: (item: any) => void;
-  deleteReaction: (str: string) => void;
-  addReaction: (str: addReactionProps) => void;
   emojiListOpened: () => void;
   emojiListClosed: () => void;
   addedReactions: any[];
   deletedReactions: any[];
   setAddedReactions: ([]) => void;
   setDeletedReactions: ([]) => void;
+  uid: string;
 }
 
 const CheersCard = ({
@@ -44,20 +43,18 @@ const CheersCard = ({
   fonts,
   pressUserName,
   pressValue,
-  deleteReaction,
   emojiListOpened,
   emojiListClosed,
   addedReactions,
   deletedReactions,
   setAddedReactions,
   setDeletedReactions,
-  addReaction,
+  uid,
 }: CheersCardProps) => {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState(undefined);
   const [selectedEmojisName, setSelectedEmojisName] = useState(undefined);
   const [reactions, setReactions] = useState(undefined);
-  const uid = '123456';
   const recipient = data?.recipient;
   const sender = data?.sender;
   const values = data?.values;

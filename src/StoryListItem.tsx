@@ -57,6 +57,7 @@ export const StoryListItem = ({
   pressValue,
   addReaction,
   deleteReaction,
+  uid,
   ...props
 }: StoryListItemProps) => {
   const [load, setLoad] = useState<boolean>(true);
@@ -351,6 +352,7 @@ export const StoryListItem = ({
             colors={colors}
             dark={dark}
             fonts={fonts}
+            uid={uid}
             pressUserName={(str) => {
               onClosePress();
               customClose();
@@ -360,9 +362,6 @@ export const StoryListItem = ({
               onClosePress();
               customClose();
               pressValue(str);
-            }}
-            addReaction={(str) => {
-              addReaction(str);
             }}
             addedReactions={reactionsToAdd[current]}
             deletedReactions={reactionsToDelete[current]}
@@ -387,9 +386,6 @@ export const StoryListItem = ({
                 });
                 setReactionsToDelete(x);
               }
-            }}
-            deleteReaction={(str) => {
-              deleteReaction(str);
             }}
             emojiListOpened={() => progress.stopAnimation()}
             emojiListClosed={() => startAnimation()}

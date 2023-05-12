@@ -141,6 +141,7 @@ export const Story = ({
           addReaction={dataState[0].addReaction}
           deleteReaction={dataState[0].deleteReaction}
           backgroundImage={dataState[0].backgroundImage}
+          uid={dataState[0].uid}
           index={i}
           onStorySeen={onStorySeen}
           unloadedAnimationBarStyle={unloadedAnimationBarStyle}
