@@ -18,6 +18,7 @@ const StoryCircleListView = ({
   avatarImageStyle,
   avatarWrapperStyle,
   avatarFlatListProps,
+  newHighlights,
 }: StoryCircleListViewProps) => (
   <FlatList
     keyExtractor={(_item, index) => index.toString()}
@@ -27,23 +28,26 @@ const StoryCircleListView = ({
     showsVerticalScrollIndicator={false}
     showsHorizontalScrollIndicator={false}
     ListFooterComponent={<View style={styles.footer} />}
-    renderItem={({ item, index }) => (
-      <StoryCircleListItem
-        avatarSize={avatarSize}
-        handleStoryItemPress={() =>
-          handleStoryItemPress && handleStoryItemPress(item, index)
-        }
-        unPressedBorderColor={unPressedBorderColor}
-        pressedBorderColor={pressedBorderColor}
-        unPressedAvatarTextColor={unPressedAvatarTextColor}
-        pressedAvatarTextColor={pressedAvatarTextColor}
-        item={item}
-        showText={showText}
-        avatarTextStyle={avatarTextStyle}
-        avatarImageStyle={avatarImageStyle}
-        avatarWrapperStyle={avatarWrapperStyle}
-      />
-    )}
+    renderItem={({ item, index }) => {
+      return (
+        <StoryCircleListItem
+          avatarSize={avatarSize}
+          handleStoryItemPress={() =>
+            handleStoryItemPress && handleStoryItemPress(item, index)
+          }
+          unPressedBorderColor={unPressedBorderColor}
+          pressedBorderColor={pressedBorderColor}
+          unPressedAvatarTextColor={unPressedAvatarTextColor}
+          pressedAvatarTextColor={pressedAvatarTextColor}
+          item={item}
+          showText={showText}
+          avatarTextStyle={avatarTextStyle}
+          avatarImageStyle={avatarImageStyle}
+          avatarWrapperStyle={avatarWrapperStyle}
+          newHighlights={newHighlights}
+        />
+      );
+    }}
     {...avatarFlatListProps}
   />
 );

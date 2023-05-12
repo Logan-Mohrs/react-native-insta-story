@@ -40,6 +40,7 @@ export const Story = ({
   avatarImageStyle,
   avatarWrapperStyle,
   avatarFlatListProps,
+  newHighlights,
 }: StoryProps) => {
   const [dataState, setDataState] = useState<IUserStory[]>(data);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -198,6 +199,7 @@ export const Story = ({
           avatarWrapperStyle={avatarWrapperStyle}
           avatarImageStyle={avatarImageStyle}
           avatarFlatListProps={avatarFlatListProps}
+          newHighlights={newHighlights}
         />
       </View>
       <Modal

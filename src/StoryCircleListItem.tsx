@@ -26,31 +26,22 @@ const StoryCircleListItem = ({
   handleStoryItemPress,
   avatarImageStyle,
   avatarWrapperStyle,
+  newHighlights,
 }: StoryCircleListItemProps) => {
-  const [isPressed, setIsPressed] = useState(item?.seen);
-
-  const prevSeen = usePrevious(item?.seen);
-
-  useEffect(() => {
-    if (prevSeen != item?.seen) {
-      setIsPressed(item?.seen);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [item?.seen]);
-
   const _handleItemPress = (item: IUserStory) => {
     if (handleStoryItemPress) handleStoryItemPress(item);
-
-    setIsPressed(true);
   };
 
-  // const avatarWrapperSize = avatarSize + 4;
   const avatarWrapperSize = 53;
 
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={['#DDA63D', '#829CC0', '#3B506E', '#F5BA45']}
+        colors={
+          newHighlights
+            ? ['#DDA63D', '#829CC0', '#3B506E', '#F5BA45']
+            : ['transparent']
+        }
         style={{
           width: avatarWrapperSize + 6,
           height: avatarWrapperSize + 6,
@@ -67,13 +58,6 @@ const StoryCircleListItem = ({
               width: avatarWrapperSize,
             },
             avatarWrapperStyle,
-            !isPressed
-              ? {
-                  borderColor: unPressedBorderColor ?? 'red',
-                }
-              : {
-                  borderColor: pressedBorderColor ?? 'grey',
-                },
           ]}
         >
           <Image
@@ -85,7 +69,6 @@ const StoryCircleListItem = ({
               },
               avatarImageStyle,
             ]}
-            // source={{ uri: item.user_image }}
             source={item.user_image}
             defaultSource={Platform.OS === 'ios' ? DEFAULT_AVATAR : null}
           />
@@ -94,16 +77,12 @@ const StoryCircleListItem = ({
       {showText && (
         <Text
           numberOfLines={1}
-          // ellipsizeMode="tail"
           style={[
             {
-              // width: avatarWrapperSize,
               ...styles.text,
               ...avatarTextStyle,
+              color: item.colors.text,
             },
-            isPressed
-              ? { color: pressedAvatarTextColor || item.colors.text }
-              : { color: unPressedAvatarTextColor || item.colors.text },
           ]}
         >
           {item.user_name}

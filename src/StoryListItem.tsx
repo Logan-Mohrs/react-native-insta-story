@@ -15,6 +15,8 @@ import {
 } from 'react-native';
 import GestureRecognizer from 'react-native-swipe-gestures';
 
+import { XCircle } from 'react-native-insta-story/src/assets/images';
+
 import CheersCard from './components/CheersCard';
 import { usePrevious, isNullOrWhitespace } from './helpers';
 import {
@@ -195,8 +197,7 @@ export const StoryListItem = ({
     }
   }
 
-  const swipeText =
-    content?.[current]?.swipeText || props.swipeText || 'Swipe Up';
+  const swipeText = content?.[current]?.swipeText || props.swipeText || null;
 
   React.useEffect(() => {
     if (onStorySeen && currentPage === index) {
@@ -205,6 +206,14 @@ export const StoryListItem = ({
         user_image: profileImage,
         user_name: profileName,
         story: content[current],
+        backgroundImage: backgroundImage,
+        pressUserName: pressUserName,
+        pressValue: pressValue,
+        addReaction: addReaction,
+        deleteReaction: deleteReaction,
+        colors: colors,
+        fonts: fonts,
+        dark: dark,
       });
     }
   }, [currentPage, index, onStorySeen, current]);
@@ -246,7 +255,7 @@ export const StoryListItem = ({
                     {
                       flex: current == key ? progress : content[key].finish,
                       height: 4,
-                      backgroundColor: 'white',
+                      backgroundColor: colors.accent,
                     },
                     loadedAnimationBarStyle,
                   ]}
@@ -298,7 +307,11 @@ export const StoryListItem = ({
                   }
                 }}
               >
-                <Text style={styles.whiteText}>X</Text>
+                <Image
+                  source={XCircle}
+                  style={{ width: 32, height: 32, tintColor: colors.text }}
+                  resizeMode="contain"
+                />
               </TouchableOpacity>
             )}
           </View>
@@ -390,7 +403,6 @@ const styles = StyleSheet.create({
   },
   flex: {
     flex: 1,
-    // backgroundColor: 'red',
   },
   flexCol: {
     flex: 1,
@@ -438,7 +450,7 @@ const styles = StyleSheet.create({
     height: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     marginBottom: 20,
   },
   avatarImage: {
@@ -449,13 +461,12 @@ const styles = StyleSheet.create({
   avatarText: {
     fontWeight: 'bold',
     color: 'white',
-    paddingLeft: 10,
+    paddingLeft: 20,
   },
   closeIconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     height: 50,
-    paddingHorizontal: 15,
   },
   pressContainer: {
     flex: 1,

@@ -103,10 +103,12 @@ export interface StoryCircleListViewProps extends SharedCircleListProps {
    * - `keyExtractor`
    */
   avatarFlatListProps?: CircleListViewFlatListProps;
+  newHighlights: boolean;
 }
 
 export interface StoryCircleListItemProps extends SharedCircleListProps {
   item: IUserStory;
+  newHighlights: boolean;
 }
 
 // TODO: add JSDoc comments where necessary
@@ -132,6 +134,7 @@ export interface StoryListItemProps {
   pressValue: (str: any) => void;
   addReaction: (str: string) => void;
   deleteReaction: (str: string) => void;
+  newHighlights: boolean;
   /**
    * Callback which returns a custom React Element to use as the
    * swipeUpComponent. IUserStoryItem is passed as an arg.
@@ -194,6 +197,7 @@ export interface StoryProps {
   onClose?: (props?: IUserStory) => any;
   /** Called when story item is loaded */
   onStart?: (props?: IUserStory) => any;
+  newHighlights: boolean;
   /**
    * Function which will get called every time a story is seen. Will be called
    * every time the user swipes backwards and forwards to that screen.
