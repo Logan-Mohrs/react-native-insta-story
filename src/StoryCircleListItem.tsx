@@ -40,7 +40,7 @@ const StoryCircleListItem = ({
         colors={
           newHighlights
             ? ['#DDA63D', '#829CC0', '#3B506E', '#F5BA45']
-            : ['transparent']
+            : ['transparent', 'transparent']
         }
         style={{
           width: avatarWrapperSize + 6,
