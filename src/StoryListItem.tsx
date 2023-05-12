@@ -97,7 +97,6 @@ export const StoryListItem = ({
         });
       }
     });
-    // console.log('Closing');
   };
   useEffect(() => {
     const isPrevious = !!prevCurrentPage && prevCurrentPage > currentPage;

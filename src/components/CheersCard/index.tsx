@@ -133,7 +133,6 @@ const CheersCard = ({
       } // this item
     }
     setReactions(x);
-    console.log({ y });
     setSelectedEmojis(y);
     setSelectedEmojisName(z);
   };
@@ -143,10 +142,6 @@ const CheersCard = ({
       updateReactions(data?.reactions);
     }
   }, [data, addedReactions, deletedReactions]);
-
-  useEffect(() => {
-    console.log({ selectedEmojis });
-  }, [selectedEmojis]);
 
   useEffect(() => {
     setLoading(reactions && selectedEmojis && selectedEmojisName);
@@ -199,8 +194,6 @@ const CheersCard = ({
   const pressEmoji = (emoji) => {
     // eslint-disable-next-line no-param-reassign
     const exists = selectedEmojis?.some((item) => item?.name === emoji.name);
-
-    console.log({ exists });
 
     if (exists) {
       // addOrRemoveReaction(emoji, false);
