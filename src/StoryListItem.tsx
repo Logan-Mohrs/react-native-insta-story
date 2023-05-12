@@ -67,19 +67,7 @@ export const StoryListItem = ({
       finish: 0,
     })),
   );
-  const [reactionsToAdd, setReactionsToAdd] = useState([
-    [
-      {
-        cheersId: 'b328ba07-1eb6-4bb2-b0cb-381056f9e337',
-        reactionType: 'volcano',
-        reactorId: '123456',
-      },
-    ],
-    [],
-    [],
-    [],
-    [],
-  ]);
+  const [reactionsToAdd, setReactionsToAdd] = useState([[], [], [], [], []]);
   const [reactionsToDelete, setReactionsToDelete] = useState([
     [],
     [],
@@ -95,13 +83,6 @@ export const StoryListItem = ({
   const prevCurrentPage = usePrevious(currentPage);
 
   const customClose = () => {
-    reactionsToAdd.map((item) => {
-      if (item.length > 0) {
-        item.map((item2) => {
-          addReaction(item2);
-        });
-      }
-    });
     reactionsToDelete.map((item) => {
       if (item.length > 0) {
         item.map((item2) => {
@@ -109,6 +90,14 @@ export const StoryListItem = ({
         });
       }
     });
+    reactionsToAdd.map((item) => {
+      if (item.length > 0) {
+        item.map((item2) => {
+          addReaction(item2);
+        });
+      }
+    });
+    // console.log('Closing');
   };
   useEffect(() => {
     const isPrevious = !!prevCurrentPage && prevCurrentPage > currentPage;
@@ -204,6 +193,7 @@ export const StoryListItem = ({
       progress.setValue(0);
     } else {
       // the next content is empty
+      customClose();
       close('next');
     }
   }
@@ -219,6 +209,7 @@ export const StoryListItem = ({
       progress.setValue(0);
     } else {
       // the previous content is empty
+      customClose();
       close('previous');
     }
   }
@@ -259,8 +250,8 @@ export const StoryListItem = ({
   return (
     <GestureRecognizer
       key={key}
-      onSwipeUp={onSwipeUp}
-      onSwipeDown={onSwipeDown}
+      // onSwipeUp={onSwipeUp}
+      // onSwipeDown={onSwipeDown}
       config={config}
       style={[styles.container, storyContainerStyle]}
     >

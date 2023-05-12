@@ -93,7 +93,6 @@ const CheersCard = ({
         return null;
       });
       if (deletedReactions && deletedReactions.length > 0) {
-        let p = y;
         deletedReactions.map((item) => {
           x.map((item1, index) => {
             if (item1.name === item.name) {
@@ -105,13 +104,13 @@ const CheersCard = ({
             }
           });
           z = z.filter((item1) => item1 !== item.name);
-          p = p.filter((item1) => item1.reactionId !== item.reactionId);
+          y = y.filter((item1) => item1.reactionId !== item.reactionId);
         });
-        y = p;
       }
       if (addedReactions) {
         addedReactions.map((item) => {
           const r = { state: false, index: 0 };
+          const exist = emojiMap.get(item.reactionType);
           x.map((item1, index) => {
             if (item1.name === item.reactionType) {
               r.state = true;
@@ -121,20 +120,20 @@ const CheersCard = ({
           if (r.state) {
             x[r.index].count += 1;
           } else {
-            const exist = emojiMap.get(item.reactionType);
             x.push({ ...exist, count: 1 });
-            y.push({
-              ...exist,
-              count: 1,
-              reactionId: null,
-            });
-            z.push(exist.name);
-            return null;
           }
+          y.push({
+            ...exist,
+            count: 1,
+            reactionId: null,
+          });
+          z.push(exist.name);
+          return null;
         });
       } // this item
     }
     setReactions(x);
+    console.log({ y });
     setSelectedEmojis(y);
     setSelectedEmojisName(z);
   };
@@ -143,7 +142,11 @@ const CheersCard = ({
     if (data && data.reactions && data.reactionCount) {
       updateReactions(data?.reactions);
     }
-  }, [data, addedReactions, deletedReactions]); //
+  }, [data, addedReactions, deletedReactions]);
+
+  useEffect(() => {
+    console.log({ selectedEmojis });
+  }, [selectedEmojis]);
 
   useEffect(() => {
     setLoading(reactions && selectedEmojis && selectedEmojisName);
@@ -197,14 +200,17 @@ const CheersCard = ({
     // eslint-disable-next-line no-param-reassign
     const exists = selectedEmojis?.some((item) => item?.name === emoji.name);
 
+    console.log({ exists });
+
     if (exists) {
-      addOrRemoveReaction(emoji, false);
+      // addOrRemoveReaction(emoji, false);
       const per = addedReactions.some(
         (item) => item.reactionType === emoji.name,
       );
       const zed = selectedEmojis.filter((item) => item.name === emoji.name);
       const x = selectedEmojisName.filter((item) => item !== emoji.name);
       setSelectedEmojisName(x);
+      setSelectedEmojis(zed);
       if (!per) {
         setDeletedReactions([
           ...deletedReactions,
@@ -217,9 +223,9 @@ const CheersCard = ({
         );
       }
     } else {
-      addOrRemoveReaction(emoji, true);
-      selectedEmojisName.push(emoji.name);
-      selectedEmojis.push({ ...emoji, count: 1 });
+      // selectedEmojisName.push(emoji.name);
+      // setSelectedEmojisName([...selectedEmojisName, emoji.name]);
+      // setSelectedEmojis([...selectedEmojis, { ...emoji, count: 1 }]);
       setAddedReactions([
         ...addedReactions,
         {
