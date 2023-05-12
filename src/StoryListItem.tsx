@@ -67,6 +67,31 @@ export const StoryListItem = ({
       finish: 0,
     })),
   );
+  const [reactionsToAdd, setReactionsToAdd] = useState([
+    [
+      {
+        cheersId: 'b328ba07-1eb6-4bb2-b0cb-381056f9e337',
+        reactionType: 'volcano',
+        reactorId: '123456',
+      },
+    ],
+    [],
+    [],
+    [],
+    [],
+  ]);
+  const [reactionsToDelete, setReactionsToDelete] = useState([
+    [],
+    [],
+    [],
+    [],
+    [],
+  ]);
+
+  useEffect(() => {
+    console.log(reactionsToAdd);
+    console.log('Current: ', reactionsToAdd[current]);
+  }, [reactionsToAdd]);
 
   const [current, setCurrent] = useState(0);
 
@@ -333,6 +358,21 @@ export const StoryListItem = ({
             addReaction={(str) => {
               addReaction(str);
             }}
+            addedReactions={reactionsToAdd[current]}
+            // deletedReactions={reactionsToDelete}
+            setAddedReactions={(item) => {
+              if (item) {
+                console.log({ item });
+                const x = reactionsToAdd.map((item1, index) => {
+                  if (index === current) {
+                    return [...item];
+                  }
+                  return item1;
+                });
+                setReactionsToAdd(x);
+              }
+            }}
+            setDeletedReactions={(item) => setReactionsToDelete(item)}
             deleteReaction={(str) => {
               deleteReaction(str);
             }}

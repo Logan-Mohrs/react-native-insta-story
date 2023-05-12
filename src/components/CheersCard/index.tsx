@@ -10,6 +10,7 @@ import styles from './styles';
 import { AddEmoji } from '../../assets/images';
 // import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { emojiMap } from '../../helpers/CheersHelpers';
+import { isEqual } from 'lodash';
 
 interface addReactionProps {
   reactorId: string;
@@ -29,6 +30,10 @@ export interface CheersCardProps {
   addReaction: (str: addReactionProps) => void;
   emojiListOpened: () => void;
   emojiListClosed: () => void;
+  addedReactions: any[];
+  deletedReactions: any[];
+  setAddedReactions: ([]) => void;
+  setDeletedReactions: ([]) => void;
 }
 
 const CheersCard = ({
@@ -40,9 +45,13 @@ const CheersCard = ({
   pressUserName,
   pressValue,
   deleteReaction,
-  addReaction,
   emojiListOpened,
   emojiListClosed,
+  addedReactions,
+  deletedReactions,
+  setAddedReactions,
+  setDeletedReactions,
+  addReaction,
 }: CheersCardProps) => {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState(undefined);
@@ -58,6 +67,19 @@ const CheersCard = ({
   const { base } = fonts;
   const { link } = fonts;
   const { detailOne } = fonts;
+  const [addedReactions1, setAddedReactions1] = useState(addedReactions);
+  const [deletedReactions1, setDeletedReactions1] = useState(deletedReactions);
+
+  useEffect(() => {
+    const z = addedReactions.some((item, index) => {
+      if (isEqual(item, addedReactions1[index])) {
+        return true;
+      }
+    });
+    if (z) {
+      setAddedReactions1(addedReactions);
+    }
+  }, [addedReactions]);
 
   const updateReactions = (dataReactions) => {
     const x = [];
@@ -82,6 +104,30 @@ const CheersCard = ({
         }
         return null;
       });
+      // if (addedReactions1) {
+      //   addedReactions1.map((item) => {
+      //     const r = { state: false, index: 0 };
+      //     x.map((item1, index) => {
+      //       if (item1.name === item.reactionType) {
+      //         r.state = true;
+      //         r.index = index;
+      //       }
+      //     });
+      //     if (r.state) {
+      //       x[r.index].count += 1;
+      //     } else {
+      //       const exist = emojiMap.get(item.reactionType);
+      //       x.push({ ...exist, count: 1 });
+      //       y.push({
+      //         ...exist,
+      //         count: 1,
+      //         reactionId: null,
+      //       });
+      //       z.push(exist.name);
+      //       return null;
+      //     }
+      //   });
+      // }
     }
     setReactions(x);
     setSelectedEmojis(y);
@@ -89,10 +135,19 @@ const CheersCard = ({
   };
 
   useEffect(() => {
+    console.log({ addedReactions1 });
+    setAddedReactions(addedReactions1);
+  }, [addedReactions1]);
+
+  useEffect(() => {
+    setDeletedReactions(deletedReactions1);
+  }, [deletedReactions1]);
+
+  useEffect(() => {
     if (data && data.reactions && data.reactionCount) {
       updateReactions(data?.reactions);
     }
-  }, [data]);
+  }, [data, addedReactions1, deletedReactions1]);
 
   useEffect(() => {
     setLoading(reactions && selectedEmojis && selectedEmojisName);
@@ -148,19 +203,32 @@ const CheersCard = ({
 
     if (exists) {
       addOrRemoveReaction(emoji, false);
+      const per = addedReactions1.some(
+        (item) => item.reactionType === emoji.name,
+      );
       const zed = selectedEmojis.filter((item) => item.name === emoji.name);
       const x = selectedEmojisName.filter((item) => item !== emoji.name);
       setSelectedEmojisName(x);
-      deleteReaction(zed[0].reactionId);
+      if (!per) {
+        setDeletedReactions1([...deletedReactions1, zed[0].reactionId]);
+        deleteReaction(zed[0].reactionId);
+      } else {
+        setAddedReactions1(
+          addedReactions1.filter((item) => item.reactionType !== emoji.name),
+        );
+      }
     } else {
       addOrRemoveReaction(emoji, true);
       selectedEmojisName.push(emoji.name);
       selectedEmojis.push({ ...emoji, count: 1 });
-      addReaction({
-        reactorId: uid,
-        cheersId: data.id,
-        reactionType: emoji.name,
-      });
+      setAddedReactions1([
+        ...addedReactions1,
+        {
+          reactorId: uid,
+          cheersId: data.id,
+          reactionType: emoji.name,
+        },
+      ]);
     }
   };
 
