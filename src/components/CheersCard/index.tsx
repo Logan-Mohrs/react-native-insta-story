@@ -27,6 +27,8 @@ export interface CheersCardProps {
   pressValue: (item: any) => void;
   deleteReaction: (str: string) => void;
   addReaction: (str: addReactionProps) => void;
+  emojiListOpened: () => void;
+  emojiListClosed: () => void;
 }
 
 const CheersCard = ({
@@ -39,6 +41,8 @@ const CheersCard = ({
   pressValue,
   deleteReaction,
   addReaction,
+  emojiListOpened,
+  emojiListClosed,
 }: CheersCardProps) => {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState(undefined);
@@ -84,50 +88,9 @@ const CheersCard = ({
     setSelectedEmojisName(z);
   };
 
-  // const updateTime = (time: string) => {
-  //   const itemTimePosted = moment.utc(time);
-  //   const now = moment(new Date()); //todays date
-  //   const currentDate = now.format('M/D/YY');
-  //   const datePosted = itemTimePosted.format('M/D/YY');
-
-  //   if (currentDate === datePosted) {
-  //     const end = moment(itemTimePosted); // another date
-  //     const duration = moment.duration(now.diff(end));
-  //     // eslint-disable-next-line
-  //     const { hours } = duration._data;
-  //     // eslint-disable-next-line
-  //     const { minutes } = duration._data;
-  //     if (hours > 0) {
-  //       if (hours === 1) {
-  //         setTimePosted(`${hours} hr ago`);
-  //       } else {
-  //         setTimePosted(`${hours} hrs ago`);
-  //       }
-  //     } else if (minutes > 0) {
-  //       if (minutes === 1) {
-  //         setTimePosted(`${minutes} min ago`);
-  //       } else {
-  //         setTimePosted(`${minutes} mins ago`);
-  //       }
-  //     } else {
-  //       setTimePosted('1 min ago');
-  //     }
-  //   } else {
-  //     setTimePosted(datePosted);
-  //   }
-  // };
-
   useEffect(() => {
     if (data && data.reactions && data.reactionCount) {
       updateReactions(data?.reactions);
-      // updateTime(data?.created);
-      // if (recipient?.id === uid) {
-      //   if (checkIfCheersViewed(data.id, cheersViewed)) {
-      //     setIsNew(false);
-      //   } else {
-      //     setIsNew(true);
-      //   }
-      // }
     }
   }, [data]);
 
@@ -203,6 +166,7 @@ const CheersCard = ({
 
   const closeEmojiKeyboard = () => {
     setIsEmojiPickerOpen(false);
+    emojiListClosed();
   };
 
   const renderEmoji = (emoji) => {
@@ -357,7 +321,12 @@ const CheersCard = ({
             {!!reactions &&
               reactions.length > 0 &&
               reactions.map((emoji, index) => renderEmoji(emoji, index))}
-            <TouchableOpacity onPress={() => setIsEmojiPickerOpen(true)}>
+            <TouchableOpacity
+              onPress={() => {
+                setIsEmojiPickerOpen(true);
+                emojiListOpened();
+              }}
+            >
               <Image
                 source={AddEmoji}
                 style={{

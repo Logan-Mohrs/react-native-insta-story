@@ -336,6 +336,8 @@ export const StoryListItem = ({
             deleteReaction={(str) => {
               deleteReaction(str);
             }}
+            emojiListOpened={() => progress.stopAnimation()}
+            emojiListClosed={() => startAnimation()}
           />
         </View>
         <View style={styles.pressContainer}>
