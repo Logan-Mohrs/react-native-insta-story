@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    borderColor: 'red',
     borderRadius: 100,
     height: 64,
     width: 64,
