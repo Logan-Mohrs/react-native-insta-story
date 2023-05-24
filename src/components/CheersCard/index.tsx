@@ -1,7 +1,6 @@
 /* eslint-dsable @typescript-eslint/no-use-before-define */
 import React, { useEffect, useState } from 'react';
 
-import { isEqual } from 'lodash';
 import moment from 'moment';
 import { View, Text, Image, TouchableOpacity, ViewStyle } from 'react-native';
 import EmojiPicker from 'rn-emoji-keyboard';
@@ -268,6 +267,7 @@ const CheersCard = ({
               paddingLeft: 4,
             }}
           >
+            ``
             {emoji.count}
           </Text>
         </Text>
@@ -403,11 +403,12 @@ const CheersCard = ({
         </View>
       </View>
       <EmojiPicker
-        enableSearchBar
-        enableSearchAnimation={false}
         selectedEmojis={selectedEmojisName}
+        defaultHeight={160}
+        hideHeader
+        expandable={false}
         open={isEmojiPickerOpen}
-        // allowMultipleSelections
+        allowMultipleSelections
         onEmojiSelected={(emoji) => pressEmoji(emoji)}
         onClose={closeEmojiKeyboard}
         theme={{
