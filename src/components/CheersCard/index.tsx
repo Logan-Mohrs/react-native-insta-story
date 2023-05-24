@@ -267,7 +267,6 @@ const CheersCard = ({
               paddingLeft: 4,
             }}
           >
-            ``
             {emoji.count}
           </Text>
         </Text>
