@@ -38,8 +38,6 @@
   "dependencies": {
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "patch-package": "^7.0.0",
-    "postinstall-postinstall": "^2.1.0",
     "prop-types": "^15.6.2",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-modalbox": "^2.0.2",
@@ -72,8 +70,7 @@
   "scripts": {
     "format": "prettier --write .",
     "prepare": "husky install",
-    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx --cache",
-    "postinstall": "patch-package"
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx --cache"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

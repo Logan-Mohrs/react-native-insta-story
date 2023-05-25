@@ -407,7 +407,6 @@ const CheersCard = ({
         hideHeader
         expandable={false}
         open={isEmojiPickerOpen}
-        allowMultipleSelections
         onEmojiSelected={(emoji) => pressEmoji(emoji)}
         onClose={closeEmojiKeyboard}
         theme={{
